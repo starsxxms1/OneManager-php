@@ -1,4 +1,4 @@
-[中文](Documentation/readme_CN.md)
+[中文](readme_CN.md)
 
 # NOTICE: the release is used as archive. 
 Please read the descriptions of settings before raising an issue.  
