@@ -394,6 +394,7 @@ function main($path)
             $url = $files['url'];
             if ( strtolower(splitlast($files['name'], '.')[1])=='html' ) return output($files['content']['body'], $files['content']['stat']);
             else {
+                if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($files['time'])==strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])) return output('', 304);
                 $fileConduitSize = getConfig('fileConduitSize', $_SERVER['disktag']);
                 $fileConduitCacheTime = getConfig('fileConduitCacheTime', $_SERVER['disktag']);
                 if (!!$fileConduitSize || !!$fileConduitCacheTime) {
@@ -401,10 +402,27 @@ function main($path)
                     else $fileConduitSize = 1024*1024;
                     if ($fileConduitCacheTime>1) $fileConduitCacheTime *= 3600;
                     else $fileConduitCacheTime = 3600;
+                    /*if ($_SERVER['HTTP_RANGE']!='') {
+                        $header['Range'] = $_SERVER['HTTP_RANGE'];
+                        $response = curl('GET', $files['url'], '', $header, 1);
+                        //return output($header['Range'] . json_encode($response['returnhead']));
+                        return output(
+                            $response['body'],
+                            $response['stat'],
+                            //$response['returnhead'],
+                            ['Content-Type' => $files['mime'], 'Cache-Control' => 'max-age=' . $fileConduitCacheTime],
+                            false
+                        );
+                    }*/
                     if ($files['size']<$fileConduitSize) return output(
                         base64_encode(file_get_contents($files['url'])),
                         200,
-                        ['Content-Type' => $files['mime'], 'Cache-Control' => 'max-age=' . $fileConduitCacheTime],
+                        [
+                            'Content-Type' => $files['mime'],
+                            'Cache-Control' => 'max-age=' . $fileConduitCacheTime,
+                            //'Cache-Control' => 'max-age=0',
+                            'Last-Modified' => gmdate('D, d M Y H:i:s T', strtotime($files['time']))
+                        ], 
                         true
                     );
                 }
@@ -720,6 +738,7 @@ function curl($method, $url, $data = '', $headers = [], $returnheader = 0, $loca
     //$response['body'] = curl_exec($ch);
     if ($returnheader) {
         list($returnhead, $response['body']) = explode("\r\n\r\n", curl_exec($ch));
+        //echo "HEAD:" . $returnhead;
         foreach (explode("\r\n", $returnhead) as $head) {
             $tmp = explode(': ', $head);
             $heads[$tmp[0]] = $tmp[1];
@@ -2265,7 +2284,7 @@ function render_list($path = '', $files = [])
             while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files['url']), $html);
-            //while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
+            //while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($_SERVER['host'] . path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
             $html = str_replace('<!--constStr@ClicktoEdit-->', getconstStr('ClicktoEdit'), $html);
             $html = str_replace('<!--constStr@CancelEdit-->', getconstStr('CancelEdit'), $html);
             $html = str_replace('<!--constStr@Save-->', getconstStr('Save'), $html);
