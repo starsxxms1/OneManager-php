@@ -419,8 +419,8 @@ function main($path)
                         200,
                         [
                             'Content-Type' => $files['mime'],
-                            //'Cache-Control' => 'max-age=' . $fileConduitCacheTime,
-                            'Cache-Control' => 'max-age=0',
+                            'Cache-Control' => 'max-age=' . $fileConduitCacheTime,
+                            //'Cache-Control' => 'max-age=0',
                             'Last-Modified' => gmdate('D, d M Y H:i:s T', strtotime($files['time']))
                         ], 
                         true
