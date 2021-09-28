@@ -37,14 +37,16 @@ function GetPathSetting($event, $context)
     $_SERVER['region'] = $context['region'];
     $_SERVER['service_name'] = $context['service']['name'];
     $_SERVER['function_name'] = $context['function']['name'];
-    $path = str_replace('%5D', ']', str_replace('%5B', '[', $event['path']));
-    $tmp = $event['requestURI'];
+    //$path = str_replace('%5D', ']', str_replace('%5B', '[', $event['path']));//%5B
+    $path = urldecode($event['path']);
+    $tmp = urldecode($event['requestURI']);
     if (strpos($tmp, '?')) $tmp = substr($tmp, 0, strpos($tmp, '?'));
     if ($path=='/'||$path=='') {
         $_SERVER['base_path'] = $tmp;
     } else {
         $_SERVER['base_path'] = substr($tmp, 0, strlen($tmp)-strlen($path)+1);
     }
+    $_SERVER['base_path'] = spurlencode($_SERVER['base_path'], '/');
 
     if (substr($path,-1)=='/') $path=substr($path,0,-1);
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
@@ -62,7 +64,8 @@ function GetPathSetting($event, $context)
     $_SERVER['referhost'] = explode('/', $event['headers']['Referer'][0])[2];
     $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $event['headers']['If-Modified-Since'][0];
     $_SERVER['FC_SERVER_PATH'] = '/var/fc/runtime/php7.2';
-    return $path;
+    //return $path;
+    return spurlencode($path, '/');
 }
 
 function getConfig($str, $disktag = '')
