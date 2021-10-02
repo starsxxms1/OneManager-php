@@ -2252,8 +2252,8 @@ function render_list($path = '', $files = [])
                 $html = str_replace('<!--IsFileStart-->', '', $html);
                 $html = str_replace('<!--IsFileEnd-->', '', $html);
             }
-            $html = str_replace('<!--FileEncodeUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . str_replace('&amp;', '&', $path))), $html);
-            $html = str_replace('<!--FileUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . str_replace('&amp;', '&', $path))), $html);
+            $html = str_replace('<!--FileEncodeUrl-->', (path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
+            $html = str_replace('<!--FileUrl-->', (path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
 
             $ext = strtolower(substr($path, strrpos($path, '.') + 1));
             if (in_array($ext, $exts['img'])) $ext = 'img';
@@ -2280,8 +2280,8 @@ function render_list($path = '', $files = [])
                 $html = str_replace('<!--Is'.$ext.'FileEnd-->', '', $html);
             }
             //while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files['url'], $html);
-            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
-            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
+            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', (path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
+            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', (path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files['url']), $html);
             //while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($_SERVER['host'] . path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
