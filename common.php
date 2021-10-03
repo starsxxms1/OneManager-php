@@ -1076,9 +1076,8 @@ function adminoperate($path)
         <meta name=viewport content="width=device-width,initial-scale=1">', getconstStr('RefreshCache'), 202);
     }
 
-    if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
-
     if ( (isset($tmpget['rename_newname'])&&$tmpget['rename_newname']!=$tmpget['rename_oldname'] && $tmpget['rename_newname']!='') || (isset($tmppost['rename_newname'])&&$tmppost['rename_newname']!=$tmppost['rename_oldname'] && $tmppost['rename_newname']!='') ) {
+        if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
         if (isset($tmppost['rename_newname'])) $VAR = 'tmppost';
         else $VAR = 'tmpget';
         // rename 重命名
@@ -1088,6 +1087,7 @@ function adminoperate($path)
         return $drive->Rename($file, ${$VAR}['rename_newname']);
     }
     if (isset($tmpget['delete_name']) || isset($tmppost['delete_name'])) {
+        if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
         if (isset($tmppost['delete_name'])) $VAR = 'tmppost';
         else $VAR = 'tmpget';
         // delete 删除
@@ -1097,6 +1097,7 @@ function adminoperate($path)
         return $drive->Delete($file);
     }
     if ( (isset($tmpget['operate_action'])&&$tmpget['operate_action']==getconstStr('Encrypt')) || (isset($tmppost['operate_action'])&&$tmppost['operate_action']==getconstStr('Encrypt')) ) {
+        if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
         if (isset($tmppost['operate_action'])) $VAR = 'tmppost';
         else $VAR = 'tmpget';
         // encrypt 加密
@@ -1108,6 +1109,7 @@ function adminoperate($path)
         return $drive->Encrypt($folder, getConfig('passfile'), ${$VAR}['encrypt_newpass']);
     }
     if (isset($tmpget['move_folder']) || isset($tmppost['move_folder'])) {
+        if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
         if (isset($tmppost['move_folder'])) $VAR = 'tmppost';
         else $VAR = 'tmpget';
         // move 移动
@@ -1132,6 +1134,7 @@ function adminoperate($path)
         }
     }
     if (isset($tmpget['copy_name']) || isset($tmppost['copy_name'])) {
+        if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
         if (isset($tmppost['copy_name'])) $VAR = 'tmppost';
         else $VAR = 'tmpget';
         // copy 复制
@@ -1141,6 +1144,7 @@ function adminoperate($path)
         return $drive->Copy($file);
     }
     if (isset($tmppost['editfile'])) {
+        if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
         // edit 编辑
         $file['path'] = $path1;
         $file['name'] = '';
@@ -1148,6 +1152,7 @@ function adminoperate($path)
         return $drive->Edit($file, $tmppost['editfile']);
     }
     if (isset($tmpget['create_name']) || isset($tmppost['create_name'])) {
+        if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
         if (isset($tmppost['create_name'])) $VAR = 'tmppost';
         else $VAR = 'tmpget';
         // create 新建
