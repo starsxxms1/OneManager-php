@@ -1228,7 +1228,7 @@ function EnvOpt($needUpdate = 0)
             $title = getconstStr('Setup');
             return message($html, $title, 202, 1);
         }
-    }
+    } else return message('please login again', 'Need login', 403);
     if (isset($_POST['submit1'])) if (compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) {
         $_SERVER['disk_oprating'] = '';
         foreach ($_POST as $k => $v) {
@@ -1279,7 +1279,7 @@ function EnvOpt($needUpdate = 0)
             $title = getconstStr('Setup');
             return message($html, $title, 200, 1);
         }
-    }
+    } else return message('please login again', 'Need login', 403);
     if (isset($_POST['config_b'])) if (compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) {
         if (!$_POST['pass']) return output("{\"Error\": \"No admin pass\"}", 403);
         if (!is_numeric($_POST['timestamp'])) return output("{\"Error\": \"Error time\"}", 403);
@@ -1337,7 +1337,7 @@ function EnvOpt($needUpdate = 0)
         } else {
             return output("{\"Error\": \"Admin pass error\"}", 403);
         }
-    }
+    } else return message('please login again', 'Need login', 403);
     if (isset($_POST['changePass'])) if (compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) {
         if (!is_numeric($_POST['timestamp'])) return message("Error time<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
         if (abs(time() - $_POST['timestamp']/1000) > 5*60) return message("Timeout<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
@@ -1355,7 +1355,7 @@ function EnvOpt($needUpdate = 0)
         } else {
             return message("Old pass error<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
         }
-    }
+    } else return message('please login again', 'Need login', 403);
 
     if (isset($_GET['preview'])) {
         $preurl = $_SERVER['PHP_SELF'] . '?preview';
