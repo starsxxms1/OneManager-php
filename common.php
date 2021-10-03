@@ -511,14 +511,14 @@ function adminpass2cookie($name, $pass, $timestamp)
 function adminpass2storage($name, $pass, $timestamp, $rand) {
     return md5($timestamp . '/' . $pass . '^' . $name . '*' . $rand) . "(" . $rand . ")";
 }
-function compareadminmd5($name, $pass, $cookie, $storage = '')
+function compareadminmd5($name, $pass, $cookie, $storage = 'default')
 {
     $c = splitfirst($cookie, '(');
     $c_md5 = $c[0];
     $c_time = substr($c[1], 0, -1);
     if (!is_numeric($c_time)) return false;
     if (time() > $c_time) return false;
-    if ($storage == '') {
+    if ($storage == 'default') {
         if (md5($name . ':' . md5($pass) . '@' . $c_time) == $c_md5) return true;
         else return false;
     } else {
