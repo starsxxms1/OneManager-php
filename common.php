@@ -1076,7 +1076,7 @@ function adminoperate($path)
         <meta name=viewport content="width=device-width,initial-scale=1">', getconstStr('RefreshCache'), 202);
     }
 
-    if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return $tmparr;
+    if (!compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) return ['statusCode'=>403];
 
     if ( (isset($tmpget['rename_newname'])&&$tmpget['rename_newname']!=$tmpget['rename_oldname'] && $tmpget['rename_newname']!='') || (isset($tmppost['rename_newname'])&&$tmppost['rename_newname']!=$tmppost['rename_oldname'] && $tmppost['rename_newname']!='') ) {
         if (isset($tmppost['rename_newname'])) $VAR = 'tmppost';
